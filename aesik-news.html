@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>애식 뉴스</title>
+<style>
+/* 던파 비트비트체: 폰트 파일을 같은 폴더에 DNFBitBitv2.woff2 (또는 .ttf)로 두세요 */
+@font-face{font-family:'DNFBitBitv2';src:local('DNFBitBitv2'),local('던파 비트비트체 v2'),url('DNFBitBitv2.woff2') format('woff2'),url('DNFBitBitv2.ttf') format('truetype');font-display:swap}
+:root{--bg:#07040b;--card:#110819;--line:#2c1740;--pink:#ff2fd0;--pp:#ffc2ef;--lav:#cdb8ff;--mint:#bff5ea;--txt:#e9def2;--dim:#8d7a9e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DNFBitBitv2','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:13px;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;min-height:100vh;border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--bg);position:relative;z-index:2}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+header h1{font-size:18px;font-weight:normal;color:var(--pink);text-shadow:0 0 8px var(--pink),0 0 18px #ff2fd088;letter-spacing:.5px;cursor:pointer}
+header small{display:block;font-size:10px;color:var(--lav);margin-top:2px}
+.lang-mini{font-family:inherit;font-size:11px;background:none;border:1px solid var(--pink);color:var(--pink);padding:3px 9px;border-radius:2px;cursor:pointer}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.tab{font-family:inherit;font-size:13px;padding:12px;background:none;border:0;border-bottom:2px solid transparent;color:var(--dim);cursor:pointer;letter-spacing:1px}
+.tab.on{color:var(--pink);border-bottom-color:var(--pink);text-shadow:0 0 8px #ff2fd0aa}
+.ticker{background:#14091d;color:var(--pp);font-size:11px;padding:6px 0;overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line)}
+.ticker span{display:inline-block;padding-left:100%;animation:tk 22s linear infinite}
+@keyframes tk{to{transform:translateX(-100%)}}
+.sec{padding:18px 16px 8px;font-size:12px;color:var(--lav);letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.sec::before{content:'';width:6px;height:6px;background:var(--pink);box-shadow:0 0 6px var(--pink)}
+.card{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.card:hover,.card:active{background:#170b22}
+.thumb{width:96px;height:72px;flex:none;object-fit:cover;border:1px solid var(--line);image-rendering:auto;display:flex;align-items:center;justify-content:center;font-size:11px;color:#14091c}
+.ct{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.ct h3{font-size:14px;line-height:1.45;font-weight:normal;color:#fff}
+.meta{font-size:10px;color:var(--dim);display:flex;gap:8px;align-items:center}
+.tag{color:var(--pink);border:1px solid var(--pink);padding:0 5px;font-size:10px}
+.lore{padding:6px 16px 30px;line-height:1.9;font-size:13px;color:var(--txt)}
+.lore p{margin-top:14px;padding-left:12px;border-left:2px solid var(--pink)}
+.hl{color:var(--pp);text-shadow:0 0 8px #ff2fd0aa}
+.loreimg{display:block;width:calc(100% - 32px);margin:6px 16px 0;border:1px solid var(--line);box-shadow:0 0 16px #ff2fd033}
+.chars{padding:0 16px 40px}
+.vbox{position:relative;margin-top:14px;border:1px solid var(--line);background:#000;box-shadow:0 0 16px #ff2fd033;line-height:0}
+.vbox video{width:100%;display:block}
+.vbox .cp{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;line-height:1.4;font-size:13px;color:#fff;background:linear-gradient(transparent,#000000cc);text-shadow:0 0 6px var(--pink)}
+.cdesc p{margin-top:12px;padding-left:12px;border-left:2px solid var(--pink);line-height:1.9;font-size:13px}
+.cdesc{margin-bottom:34px}
+/* article page */
+.back{font-family:inherit;font-size:12px;background:none;border:0;color:var(--lav);padding:14px 16px 0;cursor:pointer}
+.art{padding:14px 16px 50px}
+.art .tag{display:inline-block;margin-bottom:10px}
+.art h2{font-size:19px;font-weight:normal;line-height:1.45;color:#fff;margin-bottom:10px}
+.art .meta{padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.art .hero{width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid var(--line);margin-bottom:6px;display:flex;align-items:center;justify-content:center;color:#14091c;font-size:15px}
+.cap{font-size:10px;color:var(--dim);margin-bottom:16px}
+.art p{font-size:14px;line-height:1.95;margin-bottom:16px;color:var(--txt)}
+.more{margin-top:26px;border-top:1px solid var(--line);padding-top:6px}
+/* language modal */
+#langModal{position:fixed;inset:0;background:#07040bf2;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+.lbox{width:100%;max-width:320px;border:1px solid var(--pink);padding:26px 22px;background:var(--card);box-shadow:0 0 24px #ff2fd055,inset 0 0 20px #ff2fd022;text-align:center}
+.lbox h2{font-size:16px;font-weight:normal;color:var(--pink);text-shadow:0 0 8px var(--pink);margin-bottom:6px;letter-spacing:2px}
+.lbox p{font-size:11px;color:var(--dim);margin-bottom:12px}
+.lbtn{display:flex;justify-content:space-between;width:100%;font-family:inherit;font-size:14px;padding:11px 14px;margin-top:9px;background:none;border:1px solid var(--line);color:var(--txt);cursor:pointer}
+.lbtn:hover{border-color:var(--pink);box-shadow:0 0 10px #ff2fd066}
+.lbtn b{font-weight:normal;color:var(--pink)}
+.lbtn:nth-of-type(2) b{color:var(--lav)}.lbtn:nth-of-type(3) b{color:var(--mint)}
+/* alert */
+#alert{position:fixed;left:0;right:0;top:0;z-index:60;transform:translateY(-130%);transition:transform .3s steps(5);padding:14px;text-align:center;background:#12031a;border-bottom:2px solid var(--pink);box-shadow:0 0 30px var(--pink)}
+#alert.show{transform:none}
+#alertT{display:block;font-size:20px;color:var(--pink);text-shadow:0 0 10px var(--pink);animation:bl .6s steps(2) infinite}
+#alert small{display:block;font-size:11px;color:var(--pp);margin-top:4px}
+@keyframes bl{50%{opacity:.35}}
+/* pixel cats */
+.cat{position:fixed;bottom:6px;left:-100px;z-index:55;pointer-events:none;image-rendering:pixelated}
+.cat img{display:block;image-rendering:pixelated;filter:drop-shadow(0 0 5px #ff2fd0)}
+@keyframes roll{to{left:calc(100vw + 100px)}}
+@keyframes spin{to{transform:rotate(720deg)}}
+@keyframes hop{0%,100%{margin-bottom:0}50%{margin-bottom:44px}}
+.cat.go{animation:roll 5s linear forwards,hop .7s steps(6) infinite}
+.cat.go img{animation:spin 1.6s steps(8) infinite}
+.px{position:fixed;width:4px;height:4px;pointer-events:none;z-index:1;opacity:.5;animation:fl linear infinite}
+@keyframes fl{from{transform:translateY(105vh)}to{transform:translateY(-10vh)}}
+</style>
+</head>
+<body>
+<div id="alert"><span id="alertT"></span><small id="alertS"></small></div>
+<div id="langModal">
+  <div class="lbox">
+    <h2>LANGUAGE</h2>
+    <p>언어 선택 / 言語選択 / Select language</p>
+    <button class="lbtn" data-l="kr"><b>KR</b><span>한국어</span></button>
+    <button class="lbtn" data-l="jp"><b>JP</b><span>日本語</span></button>
+    <button class="lbtn" data-l="eg"><b>EG</b><span>English</span></button>
+  </div>
+</div>
+<div class="wrap">
+  <header><div><h1 id="logo"></h1><small id="sub"></small></div><button class="lang-mini" id="langBtn"></button></header>
+  <div id="nav">
+    <div class="tabs"><button class="tab on" id="t1"></button><button class="tab" id="t2"></button><button class="tab" id="t3"></button></div>
+    <div class="ticker"><span id="tick"></span></div>
+  </div>
+  <div id="p1"><div class="sec" id="h1"></div><div id="list"></div></div>
+  <div id="p2" style="display:none"><div class="sec" id="h2"></div><div class="lore" id="lore"></div></div>
+  <div id="p3" style="display:none"><div class="sec" id="h3"></div><div class="chars" id="chars"></div></div>
+  <div id="pa" style="display:none"></div>
+</div>
+
+<script>
+const IMG0='https://itimg.kr/8064/IMG_7612.jpeg',V1='https://www.image2url.com/r2/default/videos/1793398917444-7c99a615-cf83-4258-93c1-a076724b1c8a.mp4',V2='https://www.image2url.com/r2/default/videos/1793399157163-15f3ed0b-d152-4a06-99bb-7735b8496b4b.mp4';
+const IMG1='https://itimg.kr/8064/IMG_7611.jpeg', IMG2='https://itimg.kr/8064/IMG_7613.jpeg';
+const T={
+kr:{t3:"인물",h3:"인물 소개",c1:"치노 키요시•42세•남성•192cm",c2:"미먀•고양이 애식",d1:["매우 험악하게 생긴 외모때문인지 애식화에 면역이있다. 애식에게 물려도 애식이 되지않는다.", "애식이 범람하기 전, 평범한 회사원이었다. 회사원시절에도 험악한 인상은 다름 없었다.", "귀여운걸 매우 좋아한다. 하지만 입으로는 이를 부정한다."],d2:["10년 전 키요시가 집이나 지키라며 집에 데려온 고양이였다.", "세계적인 애식화가 진행되며 미먀도 애식이 되었다. 이성이 존재하는 돌연변이 애식.", "지능이 낮아지는 보편적인 애식화와 다르게 미먀는 오히려 지능이 올라 고양이의 몸으로 인간의 언어를 사용할 수 있게 되었다."],logo:'애식 뉴스',sub:'AESIK NEWS NETWORK',t1:'긴급속보',t2:'세계관',h1:'헤드라인 뉴스',h2:'애식(愛蝕)이란',back:'< 목록으로',more:'다른 기사',cap:'사진 = 애식 뉴스 제공',
+tick:'속보  /  생존자 수 집계 불가  /  인형을 발견해도 절대 만지지 마세요  /  물리면 귀여워집니다  /  도움이 필요하면 지하 대피소로',
+alert:'애식화 경보',alertS:'귀여운 무언가가 접근 중입니다. 즉시 대피하세요.',
+src:['애식일보','귀여움통신','핑크뉴스','솜뭉치경제','네온일보'],time:['3시간 전','5시간 전','어제','어제','2일 전'],
+news:[
+['도심 도로, 애식 떼로 전면 마비','도로',['오늘 새벽 시내 주요 도로가 애식 수백 마리로 가득 차 교통이 완전히 마비됐다. 차량 운전자들은 차를 버리고 대피했으며, 일부 애식은 버려진 차량 위에서 폴짝폴짝 뛰는 모습이 목격됐다.','당국은 "경적을 울리면 오히려 몰려든다"며 주의를 당부했다. 현재 우회 도로도 대부분 통제된 상태다.','목격자들은 "너무 귀여워서 한참 쳐다봤다. 정신 차려보니 차 문이 열려 있었다"고 전했다. 당국은 애식과 눈을 오래 마주치지 말 것을 권고했다.'],IMG1],
+['"빌딩 전층이 애식 천국"… 고층 건물 내부 점령','건물',['도심 한복판 고층 건물이 층마다 애식들로 가득 찬 것으로 확인됐다. 창문 너머로 솜털 같은 실루엣이 빼곡히 보인다는 목격담이 이어졌다.','전문가는 "엘리베이터에서 딸랑 소리가 나면 이미 늦은 것"이라고 경고했다. 일부 애식은 비상계단을 줄지어 오르내리며 단체 행동을 보이는 것으로 알려졌다.','현재 건물 반경 300m는 접근 금지 구역으로 지정됐다. 옥상에서 손을 흔드는 개체가 있어도 응답하지 말라는 지침이 내려졌다.'],IMG2],
+['대형마트, 애식에게 점령당해… 인형코너 구분 불가','마트',['한 대형마트가 애식에게 점령당했다. 장난감 코너와 애식의 구분이 어려워 진입한 생존자 3명이 실종됐다.','마트 측은 "시식코너 솜사탕이 모두 사라졌다"고 밝혔다. 카트를 타고 매장을 질주하는 개체도 확인됐다.','당국은 식료품 확보를 위한 마트 진입을 전면 금지하고, 인형 형태의 물건은 일단 애식으로 간주하라고 당부했다.'],null],
+['수족관마저 애식 점령… 수조 속에서도 동동','수족관',['시립 수족관이 애식에게 점령당했다. 일부 애식은 수조 안에서 물고기와 함께 헤엄치는 것으로 알려졌다.','돌고래쇼 무대에서는 정체불명의 박수 소리가 밤새 이어지고 있다. 펭귄 구역은 현재 상황 파악이 불가능하다.','관계자는 "물고기들이 평소보다 귀여워 보인다면 이미 전염된 것일 수 있다"고 말했다.'],null],
+['백화점도 함락… 1층 화장품 매장서 대규모 집결','백화점',['백화점이 애식에게 점령당했다. 특히 1층 화장품 매장과 팬시 코너에 집결한 개체가 많아 접근이 위험하다.','폐점 방송이 반복 재생되는 가운데 애식들이 리듬에 맞춰 춤추는 모습이 포착됐다.','당국은 시즌 한정 상품에 이끌려 접근하는 사례가 늘고 있다며 각별한 주의를 요청했다.'],null]],
+lore:['현대 사회는 <span class="hl">귀여움을 매우 갈구</span>했고, 그러한 갈구 때문인지 원인 모를 현상으로 사람들은 인형 형태의 괴물로 변해 갔다. 이 현상으로 인해 변한 이들을 <span class="hl">애식(愛蝕)</span>이라 명명했다.','이들은 이성이 없으며, 매우 귀여운 외모와 달리 공격성이 뛰어나 사람들을 무차별적으로 공격했다. 이들에게 물리면 현상이 전염되어 애식으로 변했다.','그로부터 8년이 지난 현재. 인류 대다수의 애식화가 진행되었고, 멀쩡한 인간은 손에 꼽을 정도로 줄어들었다. 아직까지 애식화의 원인은 밝혀지지 않았다.']},
+jp:{t3:"人物",h3:"人物紹介",c1:"チノ・キヨシ•42歳•男性•192cm",c2:"ミャ•猫の愛蝕",d1:["非常に厳つい外見のせいか、愛蝕化への免疫を持つ。愛蝕に噛まれても愛蝕にならない。", "愛蝕が氾濫する前は、ごく普通の会社員だった。会社員時代も厳つい顔つきは変わらなかった。", "かわいいものが大好き。しかし口ではそれを否定する。"],d2:["10年前、キヨシが「家でも守ってろ」と言って家に連れてきた猫だった。", "世界的な愛蝕化が進むなか、ミャも愛蝕になった。理性を持つ突然変異の愛蝕。", "知能が低下する一般的な愛蝕化とは違い、ミャはむしろ知能が上がり、猫の体で人間の言葉を話せるようになった。"],logo:'愛蝕ニュース',sub:'AESIK NEWS NETWORK',t1:'緊急速報',t2:'世界観',h1:'ヘッドラインニュース',h2:'愛蝕とは',back:'< 一覧へ',more:'ほかの記事',cap:'写真 = 愛蝕ニュース提供',
+tick:'速報  /  生存者数は集計不能  /  ぬいぐるみを見つけても絶対に触らないで  /  噛まれるとかわいくなります  /  助けが必要なら地下シェルターへ',
+alert:'愛蝕化警報',alertS:'かわいい何かが接近中です。直ちに避難してください。',
+src:['愛蝕日報','かわいい通信','ピンクニュース','わた経済','ネオン日報'],time:['3時間前','5時間前','昨日','昨日','2日前'],
+news:[
+['都心の道路、愛蝕の群れで全面麻痺','道路',['本日未明、市内の主要道路が数百体の愛蝕で埋め尽くされ、交通が完全に麻痺した。運転手らは車を放棄して避難し、放置車両の上で跳ね回る愛蝕も目撃された。','当局は「クラクションを鳴らすと逆に集まる」と注意を促している。迂回路もほとんどが封鎖されている。','目撃者は「かわいすぎて見入ってしまい、気づくと車のドアが開いていた」と語った。当局は愛蝕と長く目を合わせないよう勧告している。'],IMG1],
+['「ビル全フロアが愛蝕の楽園」…高層ビル内部を占拠','ビル',['都心の高層ビルが全階愛蝕で埋まっていることが確認された。窓越しにふわふわのシルエットがぎっしり見えるとの目撃談が相次ぐ。','専門家は「エレベーターでチリンと鳴ったら手遅れ」と警告する。非常階段を列になって上り下りする集団行動も確認された。','現在ビル周辺300mは立入禁止区域に指定された。屋上で手を振る個体がいても応答しないよう指示が出ている。'],IMG2],
+['大型スーパー、愛蝕に占拠…ぬいぐるみ売場と見分け不能','スーパー',['大型スーパーが愛蝕に占拠された。おもちゃ売場と愛蝕の区別が難しく、侵入した生存者3名が行方不明となっている。','店側は「試食コーナーの綿あめが全て消えた」と明かした。カートに乗って店内を疾走する個体も確認された。','当局は食料確保のための店舗侵入を全面禁止し、ぬいぐるみ状のものは愛蝕とみなすよう呼びかけている。'],null],
+['水族館まで愛蝕が占拠…水槽の中でもぷかぷか','水族館',['市立水族館が愛蝕に占拠された。水槽内で魚と一緒に泳ぐ個体も確認されている。','イルカショーの舞台では正体不明の拍手が一晩中続いている。ペンギンエリアは状況の把握ができていない。','関係者は「魚がいつもよりかわいく見えたら、すでに感染している可能性がある」と話した。'],null],
+['百貨店も陥落…1階コスメ売場に大集結','百貨店',['百貨店が愛蝕に占拠された。特に1階のコスメ・ファンシー売場に多数が集結しており危険だ。','閉店放送が繰り返し流れる中、リズムに合わせて踊る愛蝕の姿が捉えられた。','当局は季節限定商品に引き寄せられて近づく事例が増えているとして、特段の注意を求めた。'],null]],
+lore:['現代社会は<span class="hl">かわいさを強く渇望</span>し、その渇望ゆえか、原因不明の現象で人々は人形の姿をした怪物へと変わっていった。この現象で変わった者たちを<span class="hl">愛蝕</span>と名付けた。','彼らに理性はなく、とてもかわいらしい外見とは裏腹に攻撃性が高く、人々を無差別に襲った。噛まれると現象が感染し、愛蝕になってしまう。','それから8年が経った現在。人類の大多数が愛蝕化し、無事な人間は数えるほどになった。愛蝕化の原因は今も解明されていない。']},
+eg:{t3:"CHARACTERS",h3:"CHARACTER PROFILES",c1:"Chino Kiyoshi•42•Male•192cm",c2:"Mya•Aesik Cat",d1:["Perhaps because of his extremely fierce looks, he is immune to Aesik-ification. Even when bitten by an Aesik, he does not turn.", "Before the Aesik flood, he was an ordinary office worker. Even back then, his fierce appearance was no different.", "He loves cute things very much. But he denies it with his mouth."],d2:["Ten years ago, Kiyoshi brought this cat home, telling it to just guard the house.", "As the worldwide Aesik-ification progressed, Mya became Aesik too. A mutant Aesik that retains reason.", "Unlike ordinary Aesik-ification, which lowers intelligence, Mya's intelligence actually rose, letting it speak human language from a cat's body."],logo:'Aesik News',sub:'AESIK NEWS NETWORK',t1:'BREAKING',t2:'LORE',h1:'HEADLINE NEWS',h2:'WHAT IS AESIK (愛蝕)',back:'< Back',more:'More stories',cap:'Photo = Aesik News',
+tick:'BREAKING  /  Survivor count unavailable  /  Never touch a doll you find  /  If bitten, you get cute  /  Need help? Head to underground shelters',
+alert:'AESIK ALERT',alertS:'Something adorable is approaching. Evacuate immediately.',
+src:['Aesik Daily','Cute Wire','Pink News','Fluff Economy','Neon Times'],time:['3h ago','5h ago','Yesterday','Yesterday','2d ago'],
+news:[
+['Downtown Roads Paralyzed by Aesik Swarms','ROAD',['Major city roads were filled with hundreds of Aesik at dawn, bringing traffic to a total halt. Drivers abandoned their cars and fled, and some Aesik were seen bouncing on top of the empty vehicles.','Authorities warn that honking only draws them in. Most detour routes are now closed as well.','"They were so cute I stared for ages. When I snapped out of it, my car door was open," one witness said. Officials advise against prolonged eye contact.'],IMG1],
+['"Every Floor Is Aesik Heaven": Skyscraper Overrun','BUILDING',['A downtown high-rise has been confirmed packed with Aesik on every floor. Witnesses report fluffy silhouettes crowding the windows.','An expert warns: "If you hear a tiny jingle in the elevator, it is already too late." Some were seen marching up and down the emergency stairs in line.','A 300m exclusion zone is now in place. Residents are told not to respond to any figure waving from the rooftop.'],IMG2],
+['Hypermarket Seized by Aesik, Toy Aisle Indistinguishable','MART',['A large supermarket has fallen to the Aesik. Unable to tell the toy aisle from the creatures, three survivors who entered are missing.','Staff say all the cotton candy at the sample stand has vanished. Some were seen racing through the aisles on shopping carts.','Authorities have banned entry for food runs and urge the public to treat anything doll-shaped as Aesik.'],null],
+['Aquarium Taken Over, Aesik Bobbing in the Tanks','AQUARIUM',['The city aquarium has been seized by Aesik, some of which reportedly swim alongside the fish.','Unexplained applause has echoed from the dolphin show stage all night. The penguin zone remains unreachable.','"If the fish look cuter than usual, they may already be infected," one official said.'],null],
+['Department Store Falls: Mass Gathering at Cosmetics Floor','DEPT STORE',['A department store was seized by the Aesik, with many gathered at the ground-floor cosmetics and stationery counters.','As closing announcements loop, Aesik were caught dancing to the rhythm.','Authorities say more people are being lured by limited-edition items and urge extreme caution.'],null]],
+lore:['Modern society craved <span class="hl">cuteness desperately</span>, and perhaps because of that craving, people began turning into doll-shaped monsters through an unknown phenomenon. Those transformed were named <span class="hl">Aesik (愛蝕)</span>.','They have no reason, and despite their adorable looks they are extremely aggressive, attacking people indiscriminately. Anyone bitten catches the phenomenon and becomes Aesik.','Eight years have passed. Most of humanity has been Aesik-ified, and the number of unchanged humans can be counted on one hand. The cause remains unknown.']}
+};
+const grads=['linear-gradient(135deg,#ffc2ef,#cdb8ff)','linear-gradient(135deg,#bff5ea,#ffc2ef)','linear-gradient(135deg,#cdb8ff,#bff5ea)','linear-gradient(135deg,#ff8fe6,#ffe0f6)','linear-gradient(135deg,#bff5ea,#cdb8ff)'];
+let L=null,timer=null,cur=1;
+const $=id=>document.getElementById(id);
+
+function thumb(n,i,cls){
+  if(n[3]) return `<img class="${cls}" src="${n[3]}" alt="" onerror="this.outerHTML='<div class=\\'${cls}\\' style=\\'background:${grads[i]}\\'>${n[1]}</div>'">`;
+  return `<div class="${cls}" style="background:${grads[i]}">${n[1]}</div>`;
+}
+function card(n,i,d){
+  return `<div class="card" onclick="location.hash='a${i}'">${thumb(n,i,'thumb')}<div class="ct"><h3>${n[0]}</h3><div class="meta"><span class="tag">${n[1]}</span><span>${d.src[i]}</span><span>${d.time[i]}</span></div></div></div>`;
+}
+function renderStatic(){
+  const d=T[L];document.documentElement.lang={kr:'ko',jp:'ja',eg:'en'}[L];
+  $('logo').textContent=d.logo;$('sub').textContent=d.sub;$('t1').textContent=d.t1;$('t2').textContent=d.t2;
+  $('h1').textContent=d.h1;$('h2').textContent=d.h2;$('tick').textContent=d.tick;$('langBtn').textContent=L.toUpperCase();
+  $('lore').innerHTML='<img class="loreimg" style="margin:0 0 6px;width:100%" src="'+IMG0+'" alt="" onerror="this.remove()">'+d.lore.map(p=>'<p>'+p+'</p>').join('');
+  $('t3').textContent=d.t3;$('h3').textContent=d.h3;
+  const vb=(src,cp)=>`<div class="vbox"><video src="${src}" autoplay loop muted playsinline webkit-playsinline preload="auto"></video><div class="cp">${cp}</div></div>`;
+  $('chars').innerHTML=vb(V1,d.c1)+'<div class="cdesc">'+d.d1.map(p=>'<p>'+p+'</p>').join('')+'</div>'+vb(V2,d.c2)+'<div class="cdesc">'+d.d2.map(p=>'<p>'+p+'</p>').join('')+'</div>';
+  document.querySelectorAll('#chars video').forEach(v=>{v.muted=true;v.play&&v.play().catch(()=>{})});
+  $('list').innerHTML=d.news.map((n,i)=>card(n,i,d)).join('');
+}
+function route(){
+  if(!L) return;
+  const m=location.hash.match(/^#a(\d)$/),d=T[L];
+  if(m){
+    const i=+m[1],n=d.news[i];
+    $('nav').style.display='none';$('p1').style.display=$('p2').style.display=$('p3').style.display='none';$('pa').style.display='';
+    const others=d.news.map((x,j)=>j==i?'':card(x,j,d)).join('');
+    $('pa').innerHTML=`<button class="back" onclick="location.hash=''">${d.back}</button><div class="art"><span class="tag">${n[1]}</span><h2>${n[0]}</h2><div class="meta"><span>${d.src[i]}</span><span>${d.time[i]}</span></div>${thumb(n,i,'hero')}<div class="cap">${d.cap}</div>${n[2].map(p=>'<p>'+p+'</p>').join('')}<div class="more"><div class="sec" style="padding-left:0">${d.more}</div></div></div><div style="margin-top:-40px">${others}</div>`;
+    window.scrollTo(0,0);
+  }else{
+    $('nav').style.display='';$('pa').style.display='none';
+    $('p1').style.display=cur==1?'':'none';$('p2').style.display=cur==2?'':'none';$('p3').style.display=cur==3?'':'none';
+    document.querySelectorAll('#chars video').forEach(v=>{v.play&&v.play().catch(()=>{})});
+  }
+}
+function tab(n){cur=n;[1,2,3].forEach(i=>$('t'+i).classList.toggle('on',i==n));if(location.hash)location.hash='';else route()}
+$('t1').onclick=()=>tab(1);$('t2').onclick=()=>tab(2);$('t3').onclick=()=>tab(3);
+window.addEventListener('hashchange',route);
+
+/* pixel cat */
+const MAP=[
+"kk........kk",
+"kpk......kpk",
+"kkkkkkkkkkkk",
+"kkkkkkkkkkkk",
+"kEEEkkkkEEEk",
+"kEdEkkkkEdEk",
+"kEEEkkkkEEEk",
+"kkkkkkkkkkkk",
+"..kkkppkkk.."];
+const COL={k:'#1d1029',p:'#ff2fd0',E:'#ffb060',d:'#1d1029'};
+let catURL=null;
+function makeCat(){
+  const c=document.createElement('canvas');c.width=12;c.height=9;const g=c.getContext('2d');
+  MAP.forEach((r,y)=>[...r].forEach((ch,x)=>{if(COL[ch]){g.fillStyle=COL[ch];g.fillRect(x,y,1,1)}}));
+  catURL=c.toDataURL();
+}
+function cats(){
+  if(!catURL)makeCat();
+  for(let i=0;i<7;i++){
+    const c=document.createElement('div');c.className='cat';
+    const s=5+Math.floor(Math.random()*3);
+    c.innerHTML=`<img src="${catURL}" width="${12*s}" height="${9*s}" alt="">`;
+    c.style.animationDelay=(i*.5)+'s,'+(i*.12)+'s';
+    document.body.appendChild(c);
+    requestAnimationFrame(()=>c.classList.add('go'));
+    setTimeout(()=>c.remove(),10000);
+  }
+}
+function fire(){
+  const d=T[L];$('alertT').textContent=d.alert;$('alertS').textContent=d.alertS;
+  $('alert').classList.add('show');cats();
+  setTimeout(()=>$('alert').classList.remove('show'),5500);
+}
+function start(l){
+  L=l;$('langModal').style.display='none';renderStatic();route();
+  clearInterval(timer);timer=setInterval(fire,20000);
+}
+document.querySelectorAll('.lbtn').forEach(b=>b.onclick=()=>start(b.dataset.l));
+$('langBtn').onclick=()=>{$('langModal').style.display='flex'};
+$('logo').onclick=()=>tab(1);
+for(let i=0;i<14;i++){const s=document.createElement('div');s.className='px';s.style.left=Math.random()*100+'vw';s.style.background=['#ff2fd0','#cdb8ff','#bff5ea','#ffc2ef'][i%4];s.style.animationDuration=(10+Math.random()*12)+'s';s.style.animationDelay=(-Math.random()*20)+'s';document.body.appendChild(s)}
+</script>
+</body>
+</html>
